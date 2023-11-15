@@ -46,8 +46,8 @@ void transData(){
 
 			cout << consumption << endl;
 
-			LWS[Which].updateRemainEnergy(consumption);
-			LWS[disNum].updateRemainEnergy(receiveEnergy());
+			LWS[Which].updateRemainEnergy(consumption);	// 节点发送能量
+			LWS[disNum].updateRemainEnergy(receiveEnergy());	// 簇头接收消耗能量
 			cout << "节点 " << Which << " 传输数据到簇头 " << disNum << endl 
 				<< "其剩余能量:" << LWS[Which].getRemainEnergy() << ", 簇头节点剩余能量: " << LWS[disNum].getRemainEnergy() << endl;
 		}
@@ -56,12 +56,14 @@ void transData(){
 			
 			if (LWS[disNum].getRemainEnergy() < HeadMinEnergy){
 				cout << "簇头能量小于阈值" << HeadMinEnergy << "，需重新选举簇头" << endl;;
-				LWS[disNum].setCanBeHead(0);
-				Which++;
+				LWS[disNum].setCanBeHead(0);	// 小于阈值，不能再作为簇头
+				Which++;	
+				r++;	// 需要重新选簇头，轮数+1
+				WSHeads.clear();	// LEACH算法需要重新选举簇头
 				break;
 			}
 		}
-		else{
+		else if(mode == 2){
 			EDMtoTransfer(disNum);
 		}
 

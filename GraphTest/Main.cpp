@@ -6,12 +6,15 @@
 #include "head_file\energyConsumption.h"
 
 int main(){	
+	
 	cout << "LEACH(1)  LEACH-EDM(2): ";
 	cin >> mode;
-	init_Graph();	// 初始化
 
+	init_Graph();	// 初始化
 	setCoor();	// 随机坐标
+	
 	SelectHead(mode);
+
 	sCluster();
 	while (1)
 	{
@@ -22,7 +25,9 @@ int main(){
 			FlushBatchDraw();	// 刷新每一帧
 		}
 		cin >> op;
+		cout << "########第 " << r << " 轮#######" << endl;
 		transData();
+		SelectHead(mode);
 	}	
 	
 	EndBatchDraw();			// 关闭双缓存

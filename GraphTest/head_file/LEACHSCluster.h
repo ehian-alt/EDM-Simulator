@@ -63,22 +63,60 @@ void sCluster(){
 }
 
 // LEACH算法选举簇头
-void selectByLEACH(){
-	for (int i = 0; i < NUM; i++){
-		// LEACH算法选举簇头：
-		LWS[i].setS(rand() % (N + 1) / (float)(N + 1));
-		// cout << s << " " << Tn() << endl;
-		if (LWS[i].getS() < Tn()){
-			LWS[i].setIsHead(1);
-			LWS[i].setHeadNum(i);
-			WSHeads.push_back(i);
+void selectByLEACH(int r){
+	if (r == 1){
+		for (int i = 0; i < NUM; i++){
+			// LEACH算法选举簇头：
+			LWS[i].setS(rand() % (N + 1) / (float)(N + 1));
+			// cout << s << " " << Tn() << endl;
+			if (LWS[i].getS() < Tn()){
+				LWS[i].setIsHead(1);
+				LWS[i].setHeadNum(i);
+				WSHeads.push_back(i);
+			}
 		}
 	}
+	// TODO 轮数变化
+	else{
+		for (unsigned int i = 0; i < cluster.size(); i++){
+			int check = cluster[i][0];
+			int a = cluster[i][0];
+			double tmp = 0;
+			for (unsigned int j = 0; j < cluster[i].size(); j++){
+				int n = cluster[i][j];
+				// 判断是否能够成为簇头
+				if (LWS[n].getCanBeHead() == 0 || LWS[n].getRemainEnergy() < HeadMinEnergy)	{
+					cout << "节点" << n << "不具备成为成为簇头的条件" << endl;
+					LWS[n].setIsHead(0);
+					continue;
+				}
+				// 通过簇内选举
+				LWS[n].setS(rand() % (N + 1) / (float)(N + 1));
+				if (LWS[n].getS() > tmp){
+					tmp = LWS[n].getS();
+					// 把簇头换在第0位
+					cluster[i][0] = n;
+					cluster[i][j] = a;
+					a = cluster[i][0];
+				}
+			}
+			// 设置节点是否为簇头 isHead 属性
+			if (a != check) { 
+				LWS[a].setIsHead(1);
+				LWS[check].setIsHead(0);
+				
+			}
+			// 将新簇头编号加入簇头编号容器
+			WSHeads.push_back(cluster[i][0]);
+		}
+
+	}
+	
 }
 
 void SelectHead(int mode){
 	if (mode == 1){
-		selectByLEACH();
+		selectByLEACH(r);
 	}
 	else if (mode == 2){
 		//  LEACH-EDM算法选举簇头
