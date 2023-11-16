@@ -2,7 +2,7 @@
 #include <easyx.h>
 #include <math.h>
 #include <iostream>
-#include "LEACHformula.h"
+#include "Statics.h"
 
 // 无线传感器类
 class WS{
@@ -16,7 +16,7 @@ class WS{
 		double D;	// 与基站的距离
 		double s;	// 随机生成一个0~1之间的随机小数
 		double TofEDM;	// EDM算法阈值存储
-		int canBeHead = 1;	// 剩余能量是否具备成为簇头的条件
+		int canBeHead = 1;	// 剩余能量是否具备成为簇头的条件 （1表示能够成为簇头）
 		int HeadNum = -1;	// 所在簇的簇头节点编号
 
 	public:
@@ -38,7 +38,7 @@ class WS{
 		double getInitEnergy();
 
 		double getRemainEnergy();
-		double setRemainEnergy();
+		void setRemainEnergy(int energy);
 		void updateRemainEnergy(double consumption);
 
 		void setTofEDM(double T);
@@ -109,6 +109,10 @@ double WS::getInitEnergy(){
 
 double WS::getRemainEnergy(){
 	return remainEnergy;
+}
+
+void WS::setRemainEnergy(int energy){
+	remainEnergy = energy;
 }
 
 void WS::updateRemainEnergy(double consumption){

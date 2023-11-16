@@ -4,9 +4,9 @@
 
 using namespace std;
 
-#define dis( a, b, c, d ) pow(( c - a ) * ( c - a ) + ( d - b ) * ( d - b ), 0.5 )
+#define dis( a, b, c, d ) pow(( c - a ) * ( c - a ) + ( d - b ) * ( d - b ), 0.5 )	// 求距离
 
-#define REDIUS 10
+#define REDIUS 10	// WS半径
 
 #define N 99999	// 生成的随机小数精度
 
@@ -34,6 +34,13 @@ static unsigned int Which = 0;	// 到哪一个WS传输数据了？（0~99）
 
 static const double HeadMinEnergy = 3000.0;	// 节点作为簇头需要的最小能量
 
+static unsigned int isEnd = 0;	// 网络是否结束（网络节点是否都已死亡/低于某个阈值）
+
+static unsigned int numOfDeadWS = 0;	// 死亡节点个数
+
+float Tn(){
+	return (float)(p / (1 - (p * (fmod(r, 1 / p)))));
+};
 
 
 

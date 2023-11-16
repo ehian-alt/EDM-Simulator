@@ -11,3 +11,4 @@ void drawNum(int x, int y, int num){
 	sprintf_s(s, "%2d", num);
 	outtextxy(x - 8, y - 8, s);
 }
+

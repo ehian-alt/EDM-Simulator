@@ -1,4 +1,4 @@
-﻿// LEACH 簇头选举 WS节点入簇
+﻿// LEACH/EDM 簇头选举 WS节点入簇
 #include <iostream>
 #include <stdio.h>
 #include <vector>
@@ -48,7 +48,7 @@ void sCluster(){
 			cDist(LWS[n].getX(), LWS[n].getY(), n);
 		}
 	}
-
+	// 打印簇节点
 	for (auto a : cluster){
 		cout << endl << "簇：";
 		for (auto b : a){
@@ -109,11 +109,10 @@ void selectByLEACH(int r){
 			// 将新簇头编号加入簇头编号容器
 			WSHeads.push_back(cluster[i][0]);
 		}
-
 	}
-	
 }
 
+// 簇头选举
 void SelectHead(int mode){
 	if (mode == 1){
 		selectByLEACH(r);
@@ -122,8 +121,8 @@ void SelectHead(int mode){
 		//  LEACH-EDM算法选举簇头
 		selectByEDM();
 	}
-
-	cout << endl << "簇头节点";
+	// 打印簇头节点
+	cout << endl << "簇头节点WSHeads：";
 	for (auto a : WSHeads){
 		cout << a+1 << "  ";
 	}

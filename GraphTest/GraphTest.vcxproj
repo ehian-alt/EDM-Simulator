@@ -92,8 +92,9 @@
     <ClInclude Include="head_file\energyConsumption.h" />
     <ClInclude Include="head_file\LEACHSCluster.h" />
     <ClInclude Include="head_file\myTimer.h" />
+    <ClInclude Include="head_file\operation.h" />
     <ClInclude Include="head_file\Statics.h" />
-    <ClInclude Include="head_file\LEACHformula.h" />
+    <ClInclude Include="head_file\rollBack.h" />
     <ClInclude Include="head_file\initGraph.h" />
     <ClInclude Include="head_file\WS.h" />
     <ClInclude Include="head_file\randWS.h" />

@@ -3,7 +3,6 @@
 #include "WS.h"
 #include "BS.h"
 #include "Line.h"
-#include "Statics.h"
 
 static vector<WS> LWS(NUM);	// WSÈÝÆ÷
 
@@ -48,13 +47,6 @@ void setCoor(){
 void drawSrandWs(){
 	// »æÖÆBS
 	d_bs(0, 0);
-	settextcolor(BLACK);
-	setbkmode(TRANSPARENT);
-	for (unsigned int i = 0; i < cluster.size(); i++){
-		for (unsigned int j = 1; j < cluster[i].size(); j++){
-			drawLine(LWS[cluster[i][j]].getX(), LWS[cluster[i][j]].getY(), LWS[cluster[i][0]].getX(), LWS[cluster[i][0]].getY());
-		}
-	}
 	for (int i = 0; i < NUM; i++){
 		// »æÖÆWS
 		LWS[i].d_ws();
@@ -62,3 +54,12 @@ void drawSrandWs(){
 	}
 }
 
+void Lines(){
+	settextcolor(BLACK);
+	setbkmode(TRANSPARENT);
+	for (unsigned int i = 0; i < cluster.size(); i++){
+		for (unsigned int j = 1; j < cluster[i].size(); j++){
+			drawLine(LWS[cluster[i][j]].getX(), LWS[cluster[i][j]].getY(), LWS[cluster[i][0]].getX(), LWS[cluster[i][0]].getY());
+		}
+	}
+}

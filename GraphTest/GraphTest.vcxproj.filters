@@ -24,9 +24,6 @@
     <ClInclude Include="head_file\initGraph.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="head_file\LEACHformula.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="head_file\Statics.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -49,6 +46,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="head_file\energyConsumption.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="head_file\operation.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="head_file\rollBack.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
