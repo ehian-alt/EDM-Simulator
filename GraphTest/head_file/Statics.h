@@ -1,6 +1,8 @@
 ﻿// 常量
 #pragma once
+#include "myTimer.h"
 #include <vector>
+#include <set>
 
 using namespace std;
 
@@ -37,6 +39,8 @@ static const double HeadMinEnergy = 3000.0;	// 节点作为簇头需要的最小
 static unsigned int isEnd = 0;	// 网络是否结束（网络节点是否都已死亡/低于某个阈值）
 
 static unsigned int numOfDeadWS = 0;	// 死亡节点个数
+
+static set<int> deadWS;		// 死亡/剩余能量低于阈值的WS容器
 
 float Tn(){
 	return (float)(p / (1 - (p * (fmod(r, 1 / p)))));

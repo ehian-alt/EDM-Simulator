@@ -1,16 +1,7 @@
 #include <stdio.h>	// 标准输入输入
-#include <myTimer.h>	//  定时器
 #include <LEACHSCluster.h>
 #include "energyConsumption.h"
 #include "rollBack.h"
-
-// 选择算法->选簇头->入簇
-void ssc(){
-	choseMode();
-	SelectHead(mode);
-	if (mode == 1)	sCluster();
-	else EDMsCluster();
-}
 
 // run this
 void runThis(){
@@ -25,6 +16,14 @@ void choseMode(){
 		cout << "LEACH(1)  LEACH-EDM(2): ";
 		cin >> mode;
 	}
+}
+
+// 选择算法->选簇头->入簇
+void ssc(){
+	choseMode();
+	SelectHead(mode);
+	if (mode == 1)	sCluster();
+	else EDMsCluster();
 }
 
 // 选择操作

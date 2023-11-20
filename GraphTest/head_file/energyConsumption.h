@@ -53,9 +53,9 @@ void transData(){
 		}
 		if (mode == 1){
 			LEACHtoTransfer(disNum);
-			
 			if (LWS[disNum].getRemainEnergy() < HeadMinEnergy){
-				cout << "簇头能量小于阈值" << HeadMinEnergy << "，需重新选举簇头" << endl;;
+				cout << "簇头能量小于阈值" << HeadMinEnergy << "，需重新选举簇头" << endl;
+				deadWS.insert(disNum);
 				LWS[disNum].setCanBeHead(0);	// 小于阈值，不能再作为簇头
 				Which++;	
 				r++;	// 需要重新选簇头，轮数+1

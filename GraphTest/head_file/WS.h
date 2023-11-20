@@ -87,58 +87,58 @@ double WS::getS(){
 	return s;
 }
 
-void WS::setIsHead(int b){
+void WS::setIsHead(int b){	// 是否为簇头节点
 	isHead = b;
 }
 
-int WS::getIsHead(){
+int WS::getIsHead(){	// 是否为簇头节点
 	return isHead;
 }
 
-double WS::getD(){
+double WS::getD(){		// 与基站的距离
 	return D;
 }
 
-void WS::setS(double _s){
+void WS::setS(double _s){	// 随机生成一个0~1之间的随机小数
 	s = _s;
 }
 
-double WS::getInitEnergy(){
+double WS::getInitEnergy(){		// 初始能量
 	return initEnergy;
 }
 
-double WS::getRemainEnergy(){
+double WS::getRemainEnergy(){	// 初始能量
 	return remainEnergy;
 }
 
-void WS::setRemainEnergy(int energy){
+void WS::setRemainEnergy(int energy){	// 剩余能量
 	remainEnergy = energy;
 }
 
-void WS::updateRemainEnergy(double consumption){
+void WS::updateRemainEnergy(double consumption){	// 更新剩余能量（减去参数能量）
 	remainEnergy -= consumption;
 }
 
-void WS::setTofEDM(double T){
+void WS::setTofEDM(double T){	// EDM算法阈值存储
 	TofEDM = T;
 }
 
-double WS::getTofEDM(){
+double WS::getTofEDM(){		// EDM算法阈值存储
 	return TofEDM;
 }
 
-void WS::setCanBeHead(int b){
+void WS::setCanBeHead(int b){	// 剩余能量是否具备成为簇头的条件 （1表示能够成为簇头）
 	canBeHead = b;
 }
 
-int WS::getCanBeHead(){
+int WS::getCanBeHead(){		// 剩余能量是否具备成为簇头的条件 （1表示能够成为簇头）
 	return canBeHead;
 }
 
-int WS::getHeadNum(){
+int WS::getHeadNum(){	// 所在簇的簇头节点编号
 	return HeadNum;
 }
 
-void WS::setHeadNum(int n){
+void WS::setHeadNum(int n){		// 所在簇的簇头节点编号
 	HeadNum = n;
 }
