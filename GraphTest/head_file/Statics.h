@@ -20,6 +20,8 @@ static vector<int> WSHeads; // 簇头节点编号容器
 
 static const int NUM = 100;	// 初始化WS的个数
 
+static unsigned int surN = NUM;	// 存活节点个数
+
 static const double p = 0.05;	// 常量p
 
 static double Dmax = 0, Dmin = 2000;	// 节点离基站最大、最小距离
@@ -34,13 +36,15 @@ static unsigned int op = 0;	// 选择操作
 
 static unsigned int Which = 0;	// 到哪一个WS传输数据了？（0~99）
 
-static const double HeadMinEnergy = 3000.0;	// 节点作为簇头需要的最小能量
+static const double HeadMinEnergy = 5000.0;	// 节点作为簇头需要的最小能量
 
 static unsigned int isEnd = 0;	// 网络是否结束（网络节点是否都已死亡/低于某个阈值）
 
 static unsigned int numOfDeadWS = 0;	// 死亡节点个数
 
 static set<int> deadWS;		// 死亡/剩余能量低于阈值的WS容器
+
+static const int d0 = 30;	//
 
 float Tn(){
 	return (float)(p / (1 - (p * (fmod(r, 1 / p)))));

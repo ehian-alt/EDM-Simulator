@@ -16,7 +16,7 @@ int isFlow(int x, int y){
 			return 0;
 		}
 	}
-	cout << "第" << n+1 << "个WS：" << x << ", " << y << endl;
+	cout << "第" << n << "个WS：" << x << ", " << y << endl;
 	return 1;
 }
 
@@ -50,7 +50,7 @@ void drawSrandWs(){
 	for (int i = 0; i < NUM; i++){
 		// 绘制WS
 		LWS[i].d_ws();
-		drawNum(LWS[i].getX(), LWS[i].getY(), i+1);
+		drawNum(LWS[i].getX(), LWS[i].getY(), i);
 	}
 }
 

@@ -5,7 +5,7 @@
 
 // run this
 void runThis(){
-	cout << "########第 " << r << " 轮#######" << endl;
+	cout << "########第 " << r << " 轮########" << endl;
 	transData();
 	SelectHead(mode);
 }
@@ -28,7 +28,7 @@ void ssc(){
 
 // 选择操作
 void choseOperation(){
-	cout << "\t1：继续" << endl << "\t2：运行至结束" << endl << "\t3：重置初始状态" << endl << "请选择操作序号：";
+	cout << "\t1：继续执行" << endl << "\t2：运行至结束" << endl << "\t3：重置初始状态" << endl << "\t4：刷新" << endl << "请选择操作序号：";
 	cin >> op;
 	if (op == 1 || op == 2){
 		runThis();
@@ -45,10 +45,13 @@ void choseOp(){
 		ssc();
 		op = 0;
 	}
+	else if (op == 4){
+		op = 0;
+	}
 	else if (isEnd || op != 2){
 		choseOperation();
 	}
-	else{
+	else {
 		runThis();
 	}
 }

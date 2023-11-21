@@ -10,6 +10,7 @@ class WS{
 		int X;	// x坐标
 		int Y;	// y坐标
 		int isHead = 0;	// 是否为簇头节点
+		int SOrD = 1;	// 1为存活，0为死亡
 		double initEnergy;	// 初始能量
 		double remainEnergy;	// 剩余能量
 		int number;	// 编号
@@ -18,6 +19,7 @@ class WS{
 		double TofEDM;	// EDM算法阈值存储
 		int canBeHead = 1;	// 剩余能量是否具备成为簇头的条件 （1表示能够成为簇头）
 		int HeadNum = -1;	// 所在簇的簇头节点编号
+		int isAlone = 0;	// 是否为孤立节点
 
 	public:
 		WS(){}
@@ -49,6 +51,12 @@ class WS{
 
 		void setHeadNum(int n);
 		int getHeadNum();
+
+		int getSOrD();
+		void setSOrD(int b);
+
+		int getIsAlone();
+		void setIsAlone(int b);
 };
 
 // WS构造函数
@@ -56,7 +64,7 @@ WS::WS(int x, int y, int i){
 	X = x;
 	Y = y;
 	double x1 = x / 10, y1 = y / 10;
-	D = dis(x1, y1, 0.1, 0.1);
+	D = dis(x1, y1, 0, 0);
 	number = i;
 	initEnergy = 10000;	// TODO	初始能量
 	remainEnergy = 10000;	// TODO 剩余能量
@@ -141,4 +149,20 @@ int WS::getHeadNum(){	// 所在簇的簇头节点编号
 
 void WS::setHeadNum(int n){		// 所在簇的簇头节点编号
 	HeadNum = n;
+}
+
+int WS::getSOrD(){
+	return SOrD;
+}
+
+void WS::setSOrD(int b){
+	SOrD = b;
+}
+
+int WS::getIsAlone(){
+	return isAlone;
+}
+
+void WS::setIsAlone(int b){
+	isAlone = b;
 }
