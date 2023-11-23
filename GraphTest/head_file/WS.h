@@ -19,7 +19,8 @@ class WS{
 		double TofEDM;	// EDM算法阈值存储
 		int canBeHead = 1;	// 剩余能量是否具备成为簇头的条件 （1表示能够成为簇头）
 		int HeadNum = -1;	// 所在簇的簇头节点编号
-		int isAlone = 0;	// 是否为孤立节点
+		int isAlone = 0;	// 是否为孤立节点, 1表示是孤立节点，0表示不是孤立节点
+		int neighborN;		// 邻居节点个数
 
 	public:
 		WS(){}
@@ -57,13 +58,16 @@ class WS{
 
 		int getIsAlone();
 		void setIsAlone(int b);
+
+		int getNeighborN();
+		void setNeighborN(int n);
 };
 
 // WS构造函数
 WS::WS(int x, int y, int i){
 	X = x;
 	Y = y;
-	double x1 = x / 10, y1 = y / 10;
+	double x1 = x, y1 = y;
 	D = dis(x1, y1, 0, 0);
 	number = i;
 	initEnergy = 10000;	// TODO	初始能量
@@ -165,4 +169,12 @@ int WS::getIsAlone(){
 
 void WS::setIsAlone(int b){
 	isAlone = b;
+}
+
+void WS::setNeighborN(int n){
+	neighborN = n;
+}
+
+int WS::getNeighborN(){
+	return neighborN;
 }

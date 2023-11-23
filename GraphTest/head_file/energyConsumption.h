@@ -21,7 +21,7 @@ void EDMtoTransfer(int n){
 // LEACH 算法簇头传输数据到基站
 void LEACHtoTransfer(int n){
 	// TODO
-	double consumption = 0.00005*pow(LWS[n].getD(), 4) + 100;
+	double consumption = 0.00005*pow(LWS[n].getD()/10, 4) + 100;
 	LWS[n].updateRemainEnergy(consumption);
 	cout << "簇头" << n << "传输数据到基站，消耗能量："<< consumption << "剩余能量" << LWS[n].getRemainEnergy() << endl;
 }
@@ -72,6 +72,19 @@ void transData(){
 		}
 		else if(mode == 2){
 			EDMtoTransfer(disNum);
+			/*
+			*/
+			LEACHtoTransfer(disNum);
+			if (LWS[disNum].getRemainEnergy() < HeadMinEnergy){
+				cout << "簇头能量小于阈值 " << HeadMinEnergy << "，需重新选举簇头" << endl;
+
+				LWS[disNum].setCanBeHead(0);	// 小于阈值，不能再作为簇头
+				Which++;
+				r++;	// 需要重新选簇头，轮数+1
+				WSHeads.clear();	// LEACH算法需要重新选举簇头
+				break;
+			}
+
 		}
 		Which++;
 	}

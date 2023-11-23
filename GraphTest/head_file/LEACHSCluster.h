@@ -128,7 +128,6 @@ void SelectHead(int mode){
 			LWS[n].setCanBeHead(0);
 			LWS[n].setSOrD(0);
 			deadWS.insert(n);
-			surN--;
 		}
 	}
 	if (deadWS.size() + alone.size() >= NUM){
@@ -143,8 +142,13 @@ void SelectHead(int mode){
 	else if (mode == 2){
 		//  LEACH-EDM算法选举簇头
 		selectByEDM();
-	}
+	}	
 
+	// 打印簇头节点
+	cout << endl << "簇头节点WSHeads：";
+	for (auto a : WSHeads){
+		cout << a << "  ";
+	}
 	//
 	for (auto a : cluster){
 		cout << endl << "簇：";
@@ -153,12 +157,6 @@ void SelectHead(int mode){
 		}
 	}
 	//
-
-	// 打印簇头节点
-	cout << endl << "簇头节点WSHeads：";
-	for (auto a : WSHeads){
-		cout << a << "  ";
-	}
 	cout << endl << "死亡/低于阈值 节点：" << deadWS.size() << "  :";
 	for (auto a : deadWS){
 		cout << a << " ";

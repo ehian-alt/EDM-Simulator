@@ -14,6 +14,8 @@ using namespace std;
 
 static vector<vector<int>> cluster;	// 每个簇内节点（编号）集合
 
+static vector<vector<int>> clusterEDM(100);
+
 static vector<int> alone; // 孤立节点
 
 static vector<int> WSHeads; // 簇头节点编号容器
@@ -43,6 +45,10 @@ static unsigned int isEnd = 0;	// 网络是否结束（网络节点是否都已�
 static unsigned int numOfDeadWS = 0;	// 死亡节点个数
 
 static set<int> deadWS;		// 死亡/剩余能量低于阈值的WS容器
+
+static double Eavg;		// 网络平均能量
+
+static int  kop;		// 最佳簇头数
 
 static const int d0 = 30;	//
 
