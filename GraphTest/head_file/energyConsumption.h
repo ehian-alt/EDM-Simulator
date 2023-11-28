@@ -13,17 +13,50 @@ double receiveEnergy(){
 	return 100;
 }
 
-// TODO EDM算法单跳/多跳传输到基站
-void EDMtoTransfer(int n){
-
-}
-
 // LEACH 算法簇头传输数据到基站
 void LEACHtoTransfer(int n){
 	// TODO
-	double consumption = 0.00005*pow(LWS[n].getD()/10, 4) + 100;
+	double consumption = 0.00005*pow(LWS[n].getD() / 10.0, 4) + 100;
 	LWS[n].updateRemainEnergy(consumption);
-	cout << "簇头" << n << "传输数据到基站，消耗能量："<< consumption << "剩余能量" << LWS[n].getRemainEnergy() << endl;
+	cout << "簇头" << n << "传输数据到基站，消耗能量：" << consumption << "剩余能量" << LWS[n].getRemainEnergy() << endl;
+}
+
+// TODO EDM算法单跳/多跳传输到基站
+void EDMtoTransfer(int n){
+	// 遍历簇头节点，若距离基站更近则计算
+	int minR = n;
+	double EAVGj = 0, numb = 0, bt = 0.8;
+	for (auto a : WSHeads){
+		if (LWS[a].getD() < LWS[minR].getD()){
+			minR = a;
+		}
+		if (LWS[a].getD() < LWS[n].getD()){
+			EAVGj += LWS[a].getRemainEnergy();
+			numb+=1;
+		}
+	}
+	EAVGj = EAVGj / numb;
+	double newCj = 0;
+	int ans = n;
+	for (auto a : WSHeads){
+		if (LWS[a].getD() < LWS[n].getD()){
+			double DISj = pow(dis(LWS[a].getX(), LWS[a].getY(), LWS[n].getX(), LWS[n].getY()), LWS[a].getD());
+			double Cj = bt*LWS[minR].getD() / DISj + (1 - bt)*LWS[a].getRemainEnergy() / EAVGj;
+			if (Cj > newCj){
+				newCj = Cj;
+				ans = a;
+			}
+		}
+	}
+	if (ans == n){
+		LEACHtoTransfer(n);
+	}
+	else{
+		double consumption = 0.00005*pow(dis(LWS[ans].getX(), LWS[ans].getY(), LWS[n].getX(), LWS[n].getY()) / 10.0, 4) + 100;
+		LWS[n].updateRemainEnergy(consumption);
+		cout << "簇头" << n << "传输数据簇头" << ans << " ，消耗能量：" << consumption << "剩余能量" << LWS[n].getRemainEnergy() << endl;
+		EDMtoTransfer(ans);
+	}
 }
 
 // 遍历发送能量
@@ -62,7 +95,6 @@ void transData(){
 			LEACHtoTransfer(disNum);
 			if (LWS[disNum].getRemainEnergy() < HeadMinEnergy){
 				cout << "簇头能量小于阈值 " << HeadMinEnergy << "，需重新选举簇头" << endl;
-
 				LWS[disNum].setCanBeHead(0);	// 小于阈值，不能再作为簇头
 				Which++;	
 				r++;	// 需要重新选簇头，轮数+1
@@ -71,20 +103,18 @@ void transData(){
 			}
 		}
 		else if(mode == 2){
+			cout << "EDM算法数据传输" << endl;
 			EDMtoTransfer(disNum);
 			/*
 			*/
-			LEACHtoTransfer(disNum);
 			if (LWS[disNum].getRemainEnergy() < HeadMinEnergy){
 				cout << "簇头能量小于阈值 " << HeadMinEnergy << "，需重新选举簇头" << endl;
-
 				LWS[disNum].setCanBeHead(0);	// 小于阈值，不能再作为簇头
 				Which++;
 				r++;	// 需要重新选簇头，轮数+1
 				WSHeads.clear();	// LEACH算法需要重新选举簇头
 				break;
 			}
-
 		}
 		Which++;
 	}

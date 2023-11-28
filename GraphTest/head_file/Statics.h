@@ -14,8 +14,6 @@ using namespace std;
 
 static vector<vector<int>> cluster;	// 每个簇内节点（编号）集合
 
-static vector<vector<int>> clusterEDM(100);
-
 static vector<int> alone; // 孤立节点
 
 static vector<int> WSHeads; // 簇头节点编号容器
