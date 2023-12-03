@@ -5,7 +5,7 @@ using namespace std;
 #include "EDMformula.h"
 #include <algorithm>
 
-double u1 = 0.2, u2 = 0.4, u3 = 0.4;
+double u1 = 0.9, u2 = 0.012, u3 = 0.088;
 
 // 排序方式
 bool cmp(pair<int, double> a, pair<int, double> b){
@@ -13,6 +13,28 @@ bool cmp(pair<int, double> a, pair<int, double> b){
 }
 
 map<int, double> tmp;
+
+// 打印簇信息
+void printCluster(){
+	// 打印簇头节点
+	cout << endl << "簇头节点WSHeads：";
+	for (auto a : WSHeads){
+		cout << a << "  ";
+	}
+	//
+	for (auto a : cluster){
+		cout << endl << "簇：";
+		for (auto b : a){
+			cout << b << " ";
+		}
+	}
+	//
+	cout << endl << "孤立 节点：" << alone.size() << "  :";
+	for (auto a : alone){
+		cout << a << " ";
+	}
+	cout << endl << endl;
+}
 
 // 计算阈值
 void cTn(){
@@ -37,12 +59,6 @@ void selectByEDM(){
 	cTn();
 	vector<pair<int, double>> EDMTsort(tmp.begin(), tmp.end());	// 各节点按EDM算法阈值排序，key为编号，value为阈值
 	sort(EDMTsort.begin(), EDMTsort.end(), cmp);	// 按值排序
-	// dayin
-	/*
-	for (unsigned int i = 0; i < EDMTsort.size(); i++){
-		cout << EDMTsort[i].first + 1 << " " << EDMTsort[i].second << endl;
-	}
-	*/
 
 	// 选举阈值最高的Kopt个节点作为簇头
 	unsigned int i = 0;
@@ -64,8 +80,13 @@ void selectByEDM(){
 double cluEi(int n, int a){
 	double t1 = u1 * (LWS[a].getRemainEnergy() - Eavg) / LWS[n].getRemainEnergy();
 	double t2 = u2 * (R - dis(LWS[n].getX(), LWS[n].getY(), LWS[a].getX(), LWS[a].getY()) / 10) / R;	// R TODO
+	//cout << "能量……………………" << t1 << endl << "距离……………………" << t2 << endl;
+	/*
 	double t3 = u3 * (9 - LWS[a].getNeighborN()) / 9;	// 9 TODO
 	return t1 + t2 + t3;
+	*/
+	
+	return t1 + t2;
 }
 
 // 根据入簇偏好度入簇
@@ -73,7 +94,9 @@ int EDMclu(int n, vector<vector<int>> &clusterEDM){
 	int ans = -1;
 	double tmp = -1000;
 	for (auto a : WSHeads){
-		if (cluEi(n, a) > tmp && dis(LWS[n].getX(), LWS[n].getY(), LWS[a].getX(), LWS[a].getY()) < R+200 && clusterEDM[a].size() < (NUM - deadWS.size()) / WSHeads.size() + 2){
+		if (dis(LWS[n].getX(), LWS[n].getY(), LWS[a].getX(), LWS[a].getY()) < R && 
+			clusterEDM[a].size() < (NUM - deadWS.size()) / WSHeads.size() + 3 && 
+			cluEi(n, a) > tmp && LWS[n].getSOrD()){
 			ans = a;
 			tmp = cluEi(n, a);
 			LWS[n].setHeadNum(a);
@@ -81,7 +104,6 @@ int EDMclu(int n, vector<vector<int>> &clusterEDM){
 	}
 
 	if (ans == -1){
-		alone.push_back(n);
 		LWS[n].setIsAlone(1);
 		cout << "节点" << n << "孤立" << endl;
 		return 0;
@@ -110,7 +132,7 @@ void EDMsCluster(){
 		// 筛出非簇头节点
 		auto it = find(WSHeads.begin(), WSHeads.end(), n);
 		// 若不是簇头节点则根据偏好度入簇
-		if (it == WSHeads.end()){
+		if (!LWS[n].getIsAlone() && it == WSHeads.end()){
 			EDMclu(n, clusterEDM);
 		}
 	}
@@ -121,4 +143,6 @@ void EDMsCluster(){
 		}
 		i++;
 	}
+	// 打印簇信息
+	printCluster();
 }

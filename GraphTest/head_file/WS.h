@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Statics.h"
 
+static int initEnergy = 10000;	// 初始能量
 // 无线传感器类
 class WS{
 	private:

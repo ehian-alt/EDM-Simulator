@@ -29,7 +29,7 @@ void setCoor(){
 		int y = rand() % 700;
 		// ÅÐ¶ÏÖØµþ
 		if (isFlow(x, y)){
-			LWS[i] = WS( x, y, i+1);
+			LWS[i] = WS( x, y, i);
 			
 			Dmin = min( LWS[i].getD(), Dmin );
 			Dmax = max( LWS[i].getD(), Dmax );

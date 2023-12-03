@@ -3,6 +3,8 @@
 #include "myTimer.h"
 #include <vector>
 #include <set>
+#include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -14,9 +16,11 @@ using namespace std;
 
 static vector<vector<int>> cluster;	// 每个簇内节点（编号）集合
 
-static vector<int> alone; // 孤立节点
+static set<int> alone; // 孤立节点
 
 static vector<int> WSHeads; // 簇头节点编号容器
+
+static vector<int> firstHeads;	// 首次簇头节点编号容器
 
 static const int NUM = 100;	// 初始化WS的个数
 
@@ -38,7 +42,9 @@ static unsigned int Which = 0;	// 到哪一个WS传输数据了？（0~99）
 
 static const double HeadMinEnergy = 5000.0;	// 节点作为簇头需要的最小能量
 
-static unsigned int isEnd = 0;	// 网络是否结束（网络节点是否都已死亡/低于某个阈值）
+static const double WSMinENergy = 300;	// 节点存活需要的最小能量
+
+static unsigned int isEnd = 0;	// 网络是否结束,1表示结束（网络节点是否都已死亡/低于某个阈值）
 
 static unsigned int numOfDeadWS = 0;	// 死亡节点个数
 
@@ -48,7 +54,15 @@ static double Eavg;		// 网络平均能量
 
 static int  kop;		// 最佳簇头数
 
-static const int d0 = 30;	//
+static const int d0 = 200;	//	d0
+
+static int defeat = 0;	// 传输失败次数
+
+static int success = 0;	// 传输成功次数
+
+static int AloneTransfer = 0;	// 孤立不能传输
+
+static string txt = "tmp.txt";
 
 float Tn(){
 	return (float)(p / (1 - (p * (fmod(r, 1 / p)))));

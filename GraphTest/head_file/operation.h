@@ -5,9 +5,13 @@
 
 // run this
 void runThis(){
-	cout << "########第 " << r << " 轮########" << endl;
 	transData();
-	SelectHead(mode);
+	if (!isEnd){
+		SelectHead(mode);
+		if (mode == 2){
+			EDMsCluster();
+		}
+	}
 }
 
 // 选择算法
@@ -21,9 +25,25 @@ void choseMode(){
 // 选择算法->选簇头->入簇
 void ssc(){
 	choseMode();
-	SelectHead(mode);
-	if (mode == 1)	sCluster();
-	else EDMsCluster();
+
+	txt = mode == 1 ? "LEACH.txt" : "LEACH-EDM.txt";
+	ofstream outfile;
+	outfile.open(txt, ios::out);
+	outfile << "########第 1 轮########" << endl;
+	outfile.close();
+
+	if (firstHeads.size() == 0){
+		firstSelectHead();
+	}
+	else{
+		WSHeads.clear();
+		for (auto a : firstHeads){
+			LWS[a].setHeadNum(a);
+			LWS[a].setIsHead(1);
+			WSHeads.push_back(a);
+		}
+	}
+	mode == 1 ? sCluster(): EDMsCluster();
 }
 
 // 选择操作
