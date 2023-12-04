@@ -29,25 +29,24 @@ void ssc(){
 	txt = mode == 1 ? "LEACH.txt" : "LEACH-EDM.txt";
 	ofstream outfile;
 	outfile.open(txt, ios::out);
+	outfile << "初始化节点个数:" << NUM << endl << "节点初始化能量:" << initEnergy << endl;
 	outfile << "########第 1 轮########" << endl;
 	outfile.close();
-
-	if (firstHeads.size() == 0){
+	if (mode == 1){
 		firstSelectHead();
+		sCluster();
 	}
 	else{
-		WSHeads.clear();
-		for (auto a : firstHeads){
-			LWS[a].setHeadNum(a);
-			LWS[a].setIsHead(1);
-			WSHeads.push_back(a);
-		}
+		HeadMinEnergy = 1500.0;
+		SelectHead(mode);
+		EDMsCluster();
 	}
-	mode == 1 ? sCluster(): EDMsCluster();
+	// mode == 1 ? sCluster(): EDMsCluster();
 }
 
 // 选择操作
 void choseOperation(){
+	
 	cout << "\t1：继续执行" << endl << "\t2：运行至结束" << endl << "\t3：重置初始状态" << endl << "\t4：刷新" << endl << "请选择操作序号：";
 	cin >> op;
 	if (op == 1 || op == 2){

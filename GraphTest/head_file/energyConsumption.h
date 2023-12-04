@@ -36,7 +36,7 @@ string defe(int n, double con){
 
 
 // LEACH 算法, 簇头n直接传输数据到基站
-void LEACHtoTransfer(int n){
+void LEACHtoTransfer(int n, int &needS){
 	ofstream outfile;
 	outfile.open(txt, ios::app);
 	// 构造输出&&日志字符串
@@ -50,6 +50,7 @@ void LEACHtoTransfer(int n){
 	}
 	else{
 		s += "簇头" + defe(n,consumption);
+		needS = 1;
 		defeat++;	// 传输失败次数
 	}
 	cout << s;
@@ -93,13 +94,13 @@ void EDMtoTransfer(int n, int & needS){
 	}
 	// 若没有合适的则直接传输数据到基站
 	if (ans == n){
-		LEACHtoTransfer(n);
+		LEACHtoTransfer(n, needS);
 	}
 	// 有合适的则，先传给中继节点ans，再继续由ans选择发送数据到下一个节点
 	else{
 		double consumption = RjTransfer(n, ans);
 		string s = "簇头:" + to_string(n) + " 传输数据到簇头:" + to_string(ans);
-		cout << s;
+		// cout << s;
 		if (TransDO(n, consumption)){
 			LWS[n].updateRemainEnergy(consumption);
 			if (LWS[n].getRemainEnergy() < HeadMinEnergy){
@@ -113,6 +114,8 @@ void EDMtoTransfer(int n, int & needS){
 		else{
 			defeat++;
 			s += " 簇头" + defe(n, consumption);
+			cout << s;
+			needS = 1;
 			return;
 		}
 	}
@@ -129,27 +132,36 @@ void transData(){
 			outfile << "########第 " << r << " 轮########" << endl;
 			outfile.close();
 			cout << "########第 " << r << " 轮########" << endl;
+			
 		}
 		Which %= NUM;
 		int disNum = LWS[Which].getHeadNum();	// 所在簇的簇头节点
 		ofstream outfile;
 		outfile.open(txt, ios::app);
 		outfile << "******节点" << Which << "传输数据******" << endl;
+		cout << "******节点" << Which << "传输数据******" << endl;
 		if (LWS[Which].getIsAlone() || !LWS[Which].getSOrD() || LWS[Which].getRemainEnergy() <= WSMinENergy || LWS[Which].getHeadNum()==-1){
 			outfile << "节点" << Which << "孤立或死亡, 无法传输" << endl;
 			cout << "节点" << Which << "孤立或死亡, 无法传输" << endl;
 			AloneTransfer++;
-			alone.insert(Which);
-			if (alone.size() >= NUM * 0.80 || NUM*0.80<numOfDeadWS){
+			double to = 0;
+			for (int n = 0; n < NUM; n++){
+				to += LWS[n].getRemainEnergy();
+			}
+			if (alone.size() >= NUM * 0.85 || deadWS.size() >= NUM*0.85 || 100 * to / (initEnergy*NUM) < 15){
 				isEnd = 1;
-				string s = "网络剩余节点数占比低于80% ，模拟执行结束";
+				cout << "剩余能量占比:" << 100 * to / (initEnergy*NUM) << "%" << endl;
+				string s = "网络剩余节点数占比低于85%/网络剩余能量比低于15% ，模拟执行结束\n";
+				s += "数据传输成功次数总计:" + to_string(success)+"\n";
+				s += "数据传输失败次数总计:" + to_string(defeat) + "\n";
+				s += "孤立节点传输次数总计:" + to_string(AloneTransfer) + "\n";
+				s += "簇头选举次数: " + to_string(seleNumber) + "\n";
+				s += "总共消耗能量: " + to_string(to) + "\n";
+				s += "各节点广播自身信息消耗: " + to_string(showNum * 200) + "\n";
+				s += "总共轮数" + to_string(r) + "\n";
 				cout << s << endl;
 				// 写入文件
-				outfile << s << endl;
-				outfile << "数据传输成功次数总计:" << success << endl;
-				outfile << "数据传输失败次数总计:" << defeat << endl;
-				outfile << "孤立节点传输次数总计:" << AloneTransfer << endl;
-				outfile << "总共轮数:" << r << endl;
+				outfile << s;
 				outfile.close();
 				break;
 			}
@@ -180,7 +192,7 @@ void transData(){
 		outfile.close();
 		int needS = 0;
 		if (mode == 1){
-			LEACHtoTransfer(disNum);
+			LEACHtoTransfer(disNum, needS);
 		}
 		else if(mode == 2){
 			EDMtoTransfer(disNum, needS);
@@ -192,6 +204,7 @@ void transData(){
 			outfile.close();
 			cout << "存在簇头能量小于簇头最低阈值 " << HeadMinEnergy << " 需重新选举簇头" << endl;
 			Which++;
+			seleNumber++;
 			WSHeads.clear();	// LEACH算法需要重新选举簇头
 			break;
 		}

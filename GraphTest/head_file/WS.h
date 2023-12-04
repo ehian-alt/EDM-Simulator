@@ -4,7 +4,6 @@
 #include <iostream>
 #include "Statics.h"
 
-static int initEnergy = 10000;	// 初始能量
 // 无线传感器类
 class WS{
 	private:
@@ -25,7 +24,7 @@ class WS{
 
 	public:
 		WS(){}
-		WS(int x, int y, int i);
+		WS(int x, int y, int i, double initE);
 
 		void d_ws();
 		double getD();
@@ -65,14 +64,14 @@ class WS{
 };
 
 // WS构造函数
-WS::WS(int x, int y, int i){
+WS::WS(int x, int y, int i, double initE){
 	X = x;
 	Y = y;
 	double x1 = x, y1 = y;
 	D = dis(x1, y1, 0, 0);
 	number = i;
-	initEnergy = 10000;	// TODO	初始能量
-	remainEnergy = 10000;	// TODO 剩余能量
+	initEnergy = initE;	// TODO	初始能量
+	remainEnergy = initE;	// TODO 剩余能量
 }
 
 void WS::d_ws(){

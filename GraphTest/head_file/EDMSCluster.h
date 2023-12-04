@@ -5,7 +5,7 @@ using namespace std;
 #include "EDMformula.h"
 #include <algorithm>
 
-double u1 = 0.9, u2 = 0.012, u3 = 0.088;
+double u1 = 0.01, u2 = 0.90, u3 = 0.08;	// 能量，距离
 
 // 排序方式
 bool cmp(pair<int, double> a, pair<int, double> b){
@@ -22,14 +22,22 @@ void printCluster(){
 		cout << a << "  ";
 	}
 	//
+	int nn = 0;
 	for (auto a : cluster){
-		cout << endl << "簇：";
+		cout << endl << "簇(" << a.size() << "): ";
+		nn += a.size();
 		for (auto b : a){
 			cout << b << " ";
 		}
 	}
-	//
-	cout << endl << "孤立 节点：" << alone.size() << "  :";
+	cout << endl << "簇内共: " << nn << endl;
+	// 孤立节点
+	ofstream outfile;
+	outfile.open(txt, ios::app);
+	outfile << "孤立节点个数:" << alone.size() << endl;
+	outfile.close();
+
+	cout << "孤立 节点(" << alone.size() << "): ";
 	for (auto a : alone){
 		cout << a << " ";
 	}
@@ -51,12 +59,29 @@ void cTn(){
 	}
 }
 
+// new计算阈值
+void newcTn(){
+	for (int i = 0; i < NUM; i++) {
+		double T = LWS[i].getRemainEnergy() >= HeadMinEnergy ? rand() % (N + 1) / (float)(N + 1) : 0;
+		double Dfac = Dfactor(LWS[i].getD())*0.7;	// 距离因子
+		double Efac = Efactor(LWS[i].getRemainEnergy(), LWS[i].getInitEnergy())*0.3;	// 能量因子
+		cout << "距离因子: " << Dfac << endl << "能量因子: " << Efac << endl << "随机数T: " << T << endl << "计算后T值: " << T + Dfac + Efac << endl;
+		LWS[i].setTofEDM(T + Dfac + Efac);
+		// 重置每个节点的簇头节点和是否为簇头节点属性
+		LWS[i].setHeadNum(-1);
+		LWS[i].setIsHead(0);
+		tmp[i] = T;
+	}
+}
+
+
 // EDM改进算法簇头选举
 void selectByEDM(){
 	Kopt();
 	WSHeads.clear();
 	gEavg();
-	cTn();
+	// cTn();
+	newcTn();
 	vector<pair<int, double>> EDMTsort(tmp.begin(), tmp.end());	// 各节点按EDM算法阈值排序，key为编号，value为阈值
 	sort(EDMTsort.begin(), EDMTsort.end(), cmp);	// 按值排序
 
@@ -78,9 +103,9 @@ void selectByEDM(){
 
 // 入簇偏好度计算
 double cluEi(int n, int a){
-	double t1 = u1 * (LWS[a].getRemainEnergy() - Eavg) / LWS[n].getRemainEnergy();
-	double t2 = u2 * (R - dis(LWS[n].getX(), LWS[n].getY(), LWS[a].getX(), LWS[a].getY()) / 10) / R;	// R TODO
-	//cout << "能量……………………" << t1 << endl << "距离……………………" << t2 << endl;
+	double t1 = u1 * (LWS[a].getRemainEnergy() - HeadMinEnergy) / HeadMinEnergy;		// 把平均能量改为簇头阈值，保证为正数，除数改为HeadMinEnergy
+	double t2 = u2 * (R - dis(LWS[n].getX(), LWS[n].getY(), LWS[a].getX(), LWS[a].getY())) / R;	// R TODO
+	// cout << "能量……………………" << t1 << endl << "距离……………………" << t2 << endl;
 	/*
 	double t3 = u3 * (9 - LWS[a].getNeighborN()) / 9;	// 9 TODO
 	return t1 + t2 + t3;
@@ -95,21 +120,22 @@ int EDMclu(int n, vector<vector<int>> &clusterEDM){
 	double tmp = -1000;
 	for (auto a : WSHeads){
 		if (dis(LWS[n].getX(), LWS[n].getY(), LWS[a].getX(), LWS[a].getY()) < R && 
-			clusterEDM[a].size() < (NUM - deadWS.size()) / WSHeads.size() + 3 && 
+			clusterEDM[a].size() < (NUM - deadWS.size()) / WSHeads.size() + 2 && 
 			cluEi(n, a) > tmp && LWS[n].getSOrD()){
 			ans = a;
 			tmp = cluEi(n, a);
 			LWS[n].setHeadNum(a);
 		}
 	}
-
+	
 	if (ans == -1){
+		alone.insert(n);	// 暂时孤立
 		LWS[n].setIsAlone(1);
-		cout << "节点" << n << "孤立" << endl;
+		//cout << "节点" << n << "孤立" << endl;
 		return 0;
 	}
 	else{
-		cout << "节点" << n << "加入" << ans << "所在簇" << endl;
+		//cout << "节点" << n << "加入" << ans << "所在簇" << endl;
 		clusterEDM[ans].push_back(n);
 	}
 	return 0;
@@ -123,8 +149,7 @@ void EDMsCluster(){
 		clusterEDM[i] = {};
 	}
 	cluster.clear();
-	for (auto a : WSHeads)
-	{
+	for (auto a : WSHeads){
 		cluster.push_back({ a });
 	}
 	// 遍历节点选择入簇
@@ -132,7 +157,7 @@ void EDMsCluster(){
 		// 筛出非簇头节点
 		auto it = find(WSHeads.begin(), WSHeads.end(), n);
 		// 若不是簇头节点则根据偏好度入簇
-		if (!LWS[n].getIsAlone() && it == WSHeads.end()){
+		if (LWS[n].getSOrD() && it == WSHeads.end()){
 			EDMclu(n, clusterEDM);
 		}
 	}

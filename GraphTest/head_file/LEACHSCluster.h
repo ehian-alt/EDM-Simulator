@@ -53,7 +53,6 @@ void sCluster(){
 
 // LEACH首次选举簇头
 void firstSelectHead(){
-	firstHeads.clear();
 	for (int i = 0; i < NUM; i++){
 		// LEACH算法选举簇头：
 		LWS[i].setS(rand() % (N + 1) / (float)(N + 1));
@@ -62,11 +61,9 @@ void firstSelectHead(){
 			LWS[i].setIsHead(1);
 			LWS[i].setHeadNum(i);
 			WSHeads.push_back(i);
-			firstHeads.push_back(i);
 		}
 	}
 }
-
 
 // LEACH算法选举簇头
 void selectByLEACH(){
@@ -93,7 +90,7 @@ void selectByLEACH(){
 				}
 			}
 			// 把能量低于WSMinEnergy的节点设为孤立节点，并从cluster中删除
-			if (LWS[n].getIsAlone() || LWS[n].getRemainEnergy() < WSMinENergy)
+			if (LWS[n].getRemainEnergy() < WSMinENergy)
 			{
 				LWS[n].setIsAlone(1);
 				alone.insert(n);
@@ -132,15 +129,22 @@ void selectByLEACH(){
 
 // 簇头选举
 void SelectHead(int mode){
+	mode == 2 ? alone.clear() : 0;
+	// 遍历WS进行检测鉴定
 	for (int n = 0; n < NUM; n++){
+		// 向网络公布自身基本信息
+		if (LWS[n].getSOrD()){
+			LWS[n].updateRemainEnergy(200);
+		}
+		// 低于簇头最低阈值
 		if (LWS[n].getRemainEnergy() < HeadMinEnergy){
 			LWS[n].setCanBeHead(0);
 			LWS[n].setIsHead(0);
 			if (mode == 2){
 				LWS[n].setIsAlone(0);
 			}
+			// 低于节点最低阈值。
 			if (LWS[n].getRemainEnergy() < WSMinENergy){
-				numOfDeadWS++;
 				LWS[n].setIsAlone(1);
 				alone.insert(n);
 				LWS[n].setSOrD(0);
@@ -148,9 +152,14 @@ void SelectHead(int mode){
 			}
 		}
 	}
-	selectByLEACH();
-	for (auto a : WSHeads){
-		LWS[a].setIsHead(1);
+	if (mode == 1){
+		selectByLEACH();
+		for (auto a : WSHeads){
+			LWS[a].setIsHead(1);
+		}
+		printCluster();
 	}
-	printCluster();
+	else{
+		selectByEDM();
+	}
 }

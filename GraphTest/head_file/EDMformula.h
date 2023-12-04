@@ -3,7 +3,7 @@
 #include <iostream>
 #include "Statics.h"
 
-double a1 = 0.4, a2 = 0.2, a3 = 0.3;	// 能量，距离，密度
+double a1 = 0.8, a2 = 0.1, a3 = 0.1;	// 能量，距离，密度
 
 void gEavg(){
 	double totle = 0;
@@ -23,7 +23,8 @@ double Dfactor(double Di){
 // 剩余能量因子
 double Efactor(double Ei, double E0){
 	//cout << "能量因子&&&&&&&&&&&&&&&&&&" << (Ei - Eavg) / E0 << endl;
-	return (Ei - Eavg) / E0;	// TODO
+	// return (Ei - Eavg) / E0;	// TODO
+	return (Ei - HeadMinEnergy) / E0;	// TODO
 }
 
 // 密度因子
@@ -42,11 +43,11 @@ double Nfactor(int n){
 // 改进阈值公式
 double TofEDM(double Efac, double Dfac, double Nfac){
 	// TODO return (p * (a1 * Efac + a2 * Dfac + a3 * Nfac)) / (1 - (p * fmod(r, 1 / p)));
-	return a1 * Efac + a2 * Dfac + a3 * Nfac;
+	return a1 * Efac + a2 * Dfac - a3 * Nfac;
 }
 
 // 最优簇头数目
 void Kopt(){
 	// TODO
-	kop = (NUM - alone.size()) / 10 + 4;
+	kop = (NUM - deadWS.size()) / 10 + 2;
 }
