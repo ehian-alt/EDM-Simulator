@@ -29,15 +29,16 @@ void ssc(){
 	txt = mode == 1 ? "LEACH.txt" : "LEACH-EDM.txt";
 	ofstream outfile;
 	outfile.open(txt, ios::out);
-	outfile << "初始化节点个数:" << NUM << endl << "节点初始化能量:" << initEnergy << endl;
+	outfile << "初始化节点个数: " << NUM << endl << "节点初始化能量: " << initEnergy << endl << "单次广播需要能量: " << showConsume << endl;
 	outfile << "########第 1 轮########" << endl;
 	outfile.close();
 	if (mode == 1){
+		HeadMinEnergy = 5000.0;
 		firstSelectHead();
 		sCluster();
 	}
 	else{
-		HeadMinEnergy = 1500.0;
+		HeadMinEnergy = 3000.0;
 		SelectHead(mode);
 		EDMsCluster();
 	}

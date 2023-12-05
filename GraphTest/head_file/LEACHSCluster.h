@@ -134,7 +134,8 @@ void SelectHead(int mode){
 	for (int n = 0; n < NUM; n++){
 		// 向网络公布自身基本信息
 		if (LWS[n].getSOrD()){
-			LWS[n].updateRemainEnergy(200);
+			showNum++;
+			LWS[n].updateRemainEnergy(showConsume);
 		}
 		// 低于簇头最低阈值
 		if (LWS[n].getRemainEnergy() < HeadMinEnergy){

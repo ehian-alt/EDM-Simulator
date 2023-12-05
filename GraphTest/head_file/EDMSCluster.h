@@ -65,7 +65,7 @@ void newcTn(){
 		double T = LWS[i].getRemainEnergy() >= HeadMinEnergy ? rand() % (N + 1) / (float)(N + 1) : 0;
 		double Dfac = Dfactor(LWS[i].getD())*0.7;	// 距离因子
 		double Efac = Efactor(LWS[i].getRemainEnergy(), LWS[i].getInitEnergy())*0.3;	// 能量因子
-		cout << "距离因子: " << Dfac << endl << "能量因子: " << Efac << endl << "随机数T: " << T << endl << "计算后T值: " << T + Dfac + Efac << endl;
+		// cout << "距离因子: " << Dfac << endl << "能量因子: " << Efac << endl << "随机数T: " << T << endl << "计算后T值: " << T + Dfac + Efac << endl;
 		LWS[i].setTofEDM(T + Dfac + Efac);
 		// 重置每个节点的簇头节点和是否为簇头节点属性
 		LWS[i].setHeadNum(-1);

@@ -14,7 +14,7 @@ using namespace std;
 
 #define N 99999	// 生成的随机小数精度
 
-static int initEnergy = 50000;	// 初始能量
+static int initEnergy = 20000;	// 初始能量
 
 static vector<vector<int>> cluster;	// 每个簇内节点（编号）集合
 
@@ -61,6 +61,8 @@ static unsigned int seleNumber = 0;	// 重新选举簇头次数
 static int AloneTransfer = 0;	// 孤立不能传输次数
 
 static unsigned int showNum = 0;	// 广播信息次数
+
+static const int showConsume = 200;	// 单次广播自身消耗能量
 
 static string txt = "tmp.txt";
 
