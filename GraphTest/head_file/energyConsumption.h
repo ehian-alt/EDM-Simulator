@@ -155,27 +155,9 @@ void transData(){
 			outfile << "节点" << Which << "孤立或死亡, 无法传输" << endl;
 			cout << "节点" << Which << "孤立或死亡, 无法传输" << endl;
 			AloneTransfer++;	// 孤立节点不能传输次数
-			double to = 0;
-			for (int n = 0; n < NUM; n++){
-				to += LWS[n].getRemainEnergy();
-			}
-			if (alone.size() >= NUM * 0.85 || deadWS.size() >= NUM*0.85 || 100 * to / (initEnergy*NUM) < 15){
-				isEnd = 1;
-				cout << "剩余能量占比:" << 100 * to / (initEnergy*NUM) << "%" << endl;
-				string s = mode == 1 ? "LEACH" : "LEACH-EDM";
-				s += "\n网络剩余节点数占比低于85%/网络剩余能量比低于15%,模拟执行结束\n";
-				s += "数据传输成功次数总计: " + to_string(success)+"\n";
-				s += "数据传输失败次数总计: " + to_string(defeat) + "\n";
-				s += "孤立节点传输次数总计: " + to_string(AloneTransfer) + "\n";
-				s += "簇头选举次数: " + to_string(seleNumber) + "\n";
-				s += "网络剩余能量: " + to_string(to) + "\n";
-				s += "总共消耗能量: " + to_string(initEnergy*NUM-to) + "\n";
-				s += "各节点广播自身信息消耗: " + to_string(showNum * showConsume) + "\n";
-				s += "总共轮数: " + to_string(r) + "\n";
-				cout << s << endl;
-				// 写入文件
-				outfile << s;
-				outfile.close();
+			// 判断是否结束
+			if (checkEnd()){
+				if (mode == 2) { Which++; }
 				break;
 			}
 			Which++;

@@ -8,7 +8,7 @@ void runThis(){
 	transData();
 	if (!isEnd){
 		SelectHead(mode);
-		if (mode == 2){
+		if (mode == 2 && !isEnd){
 			EDMsCluster();
 		}
 	}
@@ -25,7 +25,6 @@ void choseMode(){
 // 选择算法->选簇头->入簇
 void ssc(){
 	choseMode();
-
 	txt = mode == 1 ? "LEACH.txt" : "LEACH-EDM.txt";
 	ofstream outfile;
 	outfile.open(txt, ios::out);

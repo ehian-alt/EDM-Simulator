@@ -134,7 +134,7 @@ void SelectHead(int mode){
 	for (int n = 0; n < NUM; n++){
 		// 向网络公布自身基本信息
 		if (LWS[n].getSOrD()){
-			showNum++;
+			showNum++;	// 广播次数
 			LWS[n].updateRemainEnergy(showConsume);
 		}
 		// 低于簇头最低阈值
@@ -152,6 +152,9 @@ void SelectHead(int mode){
 				deadWS.insert(n);
 			}
 		}
+	}
+	if (checkEnd()){
+		return;
 	}
 	if (mode == 1){
 		selectByLEACH();

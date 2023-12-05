@@ -14,7 +14,7 @@ using namespace std;
 
 #define N 99999	// 生成的随机小数精度
 
-static int initEnergy = 20000;	// 初始能量
+static int initEnergy = 50000;	// 初始能量
 
 static vector<vector<int>> cluster;	// 每个簇内节点（编号）集合
 

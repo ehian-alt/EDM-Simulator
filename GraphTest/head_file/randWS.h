@@ -63,3 +63,33 @@ void Lines(){
 		}
 	}
 }
+
+int checkEnd(){
+	double to = 0;
+	for (int n = 0; n < NUM; n++){
+		to += LWS[n].getRemainEnergy();
+	}
+	if (alone.size() >= NUM * 0.85 || deadWS.size() >= NUM*0.85 || 100 * to / (initEnergy*NUM) < 15){
+		isEnd = 1;
+		cout << "剩余能量占比:" << 100 * to / (initEnergy*NUM) << "%" << endl;
+		string s = mode == 1 ? "LEACH" : "LEACH-EDM";
+		s += "\n网络剩余节点数占比低于85%/网络剩余能量比低于15%,模拟执行结束\n";
+		s += "总共轮数: " + to_string(r) + "\n";
+		s += "孤立节点传输次数总计: " + to_string(AloneTransfer) + "\n";
+		s += "网络剩余能量: " + to_string(to) + "\n";
+		s += "各节点广播自身信息消耗: " + to_string(showNum * showConsume) + "\n";
+		s += "广播总次数: " + to_string(showNum) + "\n";
+		s += "簇头选举次数: " + to_string(seleNumber) + "\n";
+		s += "消耗总能量: " + to_string(initEnergy*NUM - to) + "\n";
+		s += "数据传输成功次数总计: " + to_string(success) + "\n";
+		s += "数据传输失败次数总计: " + to_string(defeat);
+		cout << s << endl;
+		// 写入文件
+		ofstream outfile;
+		outfile.open(txt, ios::app);
+		outfile << s;
+		outfile.close();
+		return 1;
+	}
+	return 0;
+}
