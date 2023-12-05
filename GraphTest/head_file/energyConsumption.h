@@ -101,6 +101,8 @@ void EDMtoTransfer(int n, int & needS){
 		double consumption = RjTransfer(n, ans);
 		string s = "簇头:" + to_string(n) + " 传输数据到簇头:" + to_string(ans);
 		// cout << s;
+		ofstream outfile;
+		outfile.open(txt, ios::app);
 		if (TransDO(n, consumption)){
 			LWS[n].updateRemainEnergy(consumption);
 			if (LWS[n].getRemainEnergy() < HeadMinEnergy){
@@ -108,6 +110,8 @@ void EDMtoTransfer(int n, int & needS){
 				LWS[n].setCanBeHead(0);
 			}
 			s += succ(n, consumption) + "\n";
+			outfile << s;
+			outfile.close();
 			cout << s;
 			EDMtoTransfer(ans, needS);
 		}
@@ -115,6 +119,8 @@ void EDMtoTransfer(int n, int & needS){
 			defeat++;
 			s += " 簇头" + defe(n, consumption);
 			cout << s;
+			outfile << s;
+			outfile.close();
 			needS = 1;
 			return;
 		}

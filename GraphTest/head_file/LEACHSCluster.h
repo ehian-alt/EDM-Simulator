@@ -54,6 +54,10 @@ void sCluster(){
 // LEACH首次选举簇头
 void firstSelectHead(){
 	for (int i = 0; i < NUM; i++){
+		if (LWS[i].getSOrD()){
+			showNum++;	// 广播次数
+			LWS[i].updateRemainEnergy(showConsume);
+		}
 		// LEACH算法选举簇头：
 		LWS[i].setS(rand() % (N + 1) / (float)(N + 1));
 		// cout << s << " " << Tn() << endl;
