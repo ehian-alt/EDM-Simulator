@@ -23,6 +23,7 @@ int TransDO(int n, double con){
 double receiveEnergy(){
 	return 100;
 }
+
 // 成功
 string succ(int n, double con){
 	string s = " 消耗能量:" + to_string(con) + " 剩余能量:" + to_string(LWS[n].getRemainEnergy());
@@ -42,7 +43,7 @@ void LEACHtoTransfer(int n, int &needS){
 	// 构造输出&&日志字符串
 	string s = "簇头" + to_string(n) + " 传输数据至基站,";
 	// TODO
-	double consumption = LWS[n].getD() > d0 ? 0.00005*pow(LWS[n].getD() / 10.0, 4) + 100 : 0.05*pow(LWS[n].getD() / 10, 2) + 100;
+	double consumption = LWS[n].getD() > d0 ? 0.00005*pow(LWS[n].getD() / 10.0, 4) + 100 : 0.01*pow(LWS[n].getD() / 10, 2) + 100;
 	if (TransDO(n, consumption)){
 		LWS[n].updateRemainEnergy(consumption);		// 节点发送能量
 		s += succ(n, consumption) + " 传输成功!" + "\n";
