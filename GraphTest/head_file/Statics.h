@@ -14,7 +14,7 @@ using namespace std;
 
 #define N 99999	// 生成的随机小数精度
 
-static int initEnergy = 50000;	// 初始能量
+static const int initEnergy = 50000;	// 初始能量
 
 static vector<vector<int>> cluster;	// 每个簇内节点（编号）集合
 
@@ -30,7 +30,7 @@ static double Dmax = 0, Dmin = 2000;	// 节点离基站最大、最小距离
 
 static int r = 1;	// 轮数
 
-static float R = 200; // TODO 节点最大可通信范围200
+static const float R = 200; // TODO 节点最大可通信范围200
 
 static int mode;	// 1：LEACH算法		2：LEACH-EDM算法
 
@@ -48,7 +48,7 @@ static set<int> deadWS;		// 死亡/剩余能量低于阈值的WS容器
 
 static double Eavg;		// 网络平均能量
 
-static int  kop;		// 最佳簇头数
+static int kop;		// 最佳簇头数
 
 static const int d0 = 200;	//	d0
 
